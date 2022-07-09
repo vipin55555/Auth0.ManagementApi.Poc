@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth0.ManagementApi.Api", "Auth0.ManagementApi.Poc\Auth0.ManagementApi.Api.csproj", "{973B6B17-9877-405D-B908-16DE6A2443D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{973B6B17-9877-405D-B908-16DE6A2443D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{973B6B17-9877-405D-B908-16DE6A2443D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{973B6B17-9877-405D-B908-16DE6A2443D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{973B6B17-9877-405D-B908-16DE6A2443D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C715143-0335-4C8E-9DF2-D4FE033C8FCC}
+	EndGlobalSection
+EndGlobal
