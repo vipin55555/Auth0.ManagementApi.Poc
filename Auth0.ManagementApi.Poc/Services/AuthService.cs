@@ -19,7 +19,7 @@ namespace Auth0.ManagementApi.Api.Services {
         }
 
         /// <summary>
-        /// 
+        /// Get Auth0 users
         /// </summary>
         /// <returns></returns>
         public async Task<IPagedList<Auth0User>> GetAuth0Users() {
@@ -45,7 +45,7 @@ namespace Auth0.ManagementApi.Api.Services {
         }
 
         /// <summary>
-        /// 
+        /// Get Auth0 Roles
         /// </summary>
         /// <returns></returns>
         public async Task<IPagedList<Role>> GetAuth0Roles() {
@@ -71,7 +71,7 @@ namespace Auth0.ManagementApi.Api.Services {
         }
 
         /// <summary>
-        /// 
+        /// Create Auth0 user
         /// </summary>
         /// <returns></returns>
         public async Task<Auth0User> CreateAuth0User() {
@@ -88,10 +88,10 @@ namespace Auth0.ManagementApi.Api.Services {
                 // Create Auth0 user
                 Auth0User createUser = await managementApiClient.Users.CreateAsync(new UserCreateRequest {
                     Email = "{Your_Email_Id}",
-                    UserName = "{Your_UserName}",
+                    UserName = "{Your_UserName}", // Must not contain space with max limit of 14 characters
                     FirstName = "{Your_FirstName}",
                     Password = "{Your_Password}",
-                    Connection = "{Your_Connection}"
+                    Connection = "{Your_Connection}" // By default we can use "Username-Password-Authentication"
                 });
 
                 return createUser;
@@ -104,8 +104,10 @@ namespace Auth0.ManagementApi.Api.Services {
 
 
         /// <summary>
-        /// 
+        /// Assign Role to a user
         /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
         /// <returns></returns>
         public async Task<Auth0User> AssignRoleToAuth0User(string userId, string roleId) {
             try {
@@ -118,18 +120,18 @@ namespace Auth0.ManagementApi.Api.Services {
                 //Cretae mgt API instance
                 ManagementApiClient managementApiClient = new(auth0MgtAPIToken, _configuration["Auth0:Domain"]);
 
-                //
+                //Get role by id
                 Role auth0Role = await managementApiClient.Roles.GetAsync(roleId);
 
-                //
-                if(auth0Role == null) {
+                //If role found, return error
+                if (auth0Role == null) {
                     throw new Exception("Role not found");
                 }
 
-                //
+                //Get user by id
                 Auth0User auth0User = await managementApiClient.Users.GetAsync(userId);
 
-                //
+                //If user not found, return error
                 if (auth0User == null) {
                     throw new Exception("User not found");
                 }
@@ -146,15 +148,16 @@ namespace Auth0.ManagementApi.Api.Services {
         }
 
         /// <summary>
-        /// 
+        /// Get Auth0 Management API token
         /// </summary>
         /// <returns></returns>
         private async Task<Auth0TokenVM> GetAuth0ManagementToken() {
             try {
-                //
+
+                // Auth0 get access token Url
                 string url = $"https://{_configuration["Auth0:Domain"]}/oauth/token";
 
-                //
+                // Request body containing auth0 custom machine to machine app clientId, clientSecret and auth0 management Api audience
                 var requestBody = new {
                     grant_type = "client_credentials",
                     client_id = _configuration["Auth0:ManagementApp:ClientId"],
@@ -162,16 +165,16 @@ namespace Auth0.ManagementApi.Api.Services {
                     audience = _configuration["Auth0:ManagementApp:ApiAudience"]
                 };
 
-                //
+                //Create Http client instance
                 HttpClient httpClient = new();
 
-                //
+                // Create a post request to fetch access token along with expiry time and scope
                 HttpResponseMessage response = await httpClient.PostAsync(url, new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json"));
 
-                //
+                // Token response VM
                 Auth0TokenVM auth0TokenResult = new();
 
-                //
+                //If response is successfull then fetch and return auth0 token
                 if (response.IsSuccessStatusCode) {
                     string result = await response.Content.ReadAsStringAsync();
                     auth0TokenResult = JsonConvert.DeserializeObject<Auth0TokenVM>(result);

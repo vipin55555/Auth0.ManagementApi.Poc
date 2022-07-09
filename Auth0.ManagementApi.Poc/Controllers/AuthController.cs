@@ -1,6 +1,5 @@
 ﻿using Auth0.ManagementApi.Api.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -10,17 +9,13 @@ namespace Auth0.ManagementApi.Api.Controllers {
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class AuthController : Controller {
-        private IConfiguration _configuration;
         private readonly IAuthService _authService;
-        public AuthController(
-            IConfiguration configuration,
-            IAuthService authService) {
-            this._configuration = configuration;
+        public AuthController(IAuthService authService) {
             this._authService = authService;
         }
 
         /// <summary>
-        /// 
+        /// Get Auth0 users
         /// </summary>
         /// <returns></returns>
         [HttpGet("Auth0Users")]
@@ -34,7 +29,7 @@ namespace Auth0.ManagementApi.Api.Controllers {
         }
 
         /// <summary>
-        /// 
+        /// Get Auth0 Roles
         /// </summary>
         /// <returns></returns>
         [HttpGet("Auth0Roles")]
@@ -48,7 +43,7 @@ namespace Auth0.ManagementApi.Api.Controllers {
         }
 
         /// <summary>
-        /// 
+        /// Create Auth0 user
         /// </summary>
         /// <returns></returns>
         [HttpPost("Auth0User")]
@@ -62,8 +57,10 @@ namespace Auth0.ManagementApi.Api.Controllers {
         }
 
         /// <summary>
-        /// 
+        /// Assign Role to a user
         /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpPut("Assign/User/{userId}/Role/{roleId}")]
         public async Task<IActionResult> AssignRoleToAuth0User([FromRoute] string userId, [FromRoute]string roleId) {
